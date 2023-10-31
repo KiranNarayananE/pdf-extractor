@@ -6,20 +6,24 @@ import mongoose from "mongoose";
 import * as dotenv from "dotenv";
 dotenv.config();
 import connectDB from "./database/Connection.js";
+import userRoutes from "./router/user.js";
 
 
 
 //*  CONFIGURATION *//
 const app = express();
+app.use(morgan("dev"))
 const PORT = process.env.PORT || 6001;
-app.use(bodyParser.json({limit:'50mb'}));
+
 
 app.use(express.json())
+app.use(express.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 app.use(cors())
 
 //*  ROUTES   *//
 
-
+app.use("/", userRoutes);
 
 
 //*  Databases *//

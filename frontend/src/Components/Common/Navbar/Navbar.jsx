@@ -2,11 +2,12 @@ import {useLocation,useNavigate } from "react-router-dom";
 import MaxWidthWrapper from '../MaxWidthWrapper/MaxWidthWrapper'
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/solid";
 import { useState,useEffect } from "react";
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { userLogout } from "../../../Redux/userAuth";
 
 const Navbar = () => {
   
-    const user = useSelector((state) => state.User?.Token);
+    const user = useSelector((state) => state.user?.Token);
     const [isTopOfPage, setIsTopOfPage] = useState(true);
     const [isMenuToggled, setIsMenuToggled] = useState(false)
     const navigate=useNavigate()
@@ -14,8 +15,15 @@ const Navbar = () => {
     const currentEndpoint = location.pathname;
     console.log(currentEndpoint)
     const flexBetween = "flex items-center justify-between";
+    const navbarBackground = isTopOfPage ? "" : "bg-primary-100 drop-shadow";
+    const dispatch = useDispatch();
+    const logout = () => {
+        dispatch(userLogout());
+        navigate("/login");
+    };
     useEffect(() => {
     const handleScroll = () => {
+     
       if (window.scrollY === 0) {
         setIsTopOfPage(true);
       }
@@ -26,8 +34,9 @@ const Navbar = () => {
   }, []);
   return (
     <>
+    {console.log(isTopOfPage)}
       <nav
-        className={`${isTopOfPage} ? "" : "bg-primary-100 drop-shadow"; ${flexBetween} fixed top-0 z-30 w-full py-6`}
+        className={`${navbarBackground} ${flexBetween} fixed top-0 z-30 w-full py-6`}
       >
       <MaxWidthWrapper className={`${flexBetween} mx-auto`}>
       <div className={`${flexBetween} w-full gap-16`}>
@@ -42,7 +51,7 @@ const Navbar = () => {
                   <p  className={`${currentEndpoint === "/" ? "text-primary-500" : ""}
         transition duration-500 hover:text-primary-300 cursor-pointer
       `}
-      onClick={() => navigate("/home")}
+      onClick={() => navigate("/")}
     >
       Home
     </p>
@@ -63,7 +72,7 @@ const Navbar = () => {
                   </button>
                 </div>:
                 <div className={`${flexBetween} gap-8 `}>
-                <p>Logout</p>
+                <p onClick={logout}>Logout</p>
                 <button className="rounded-md bg-secondary-500 px-10 py-2 hover:bg-primary-500 hover:text-white">
                   Get Started
                 </button>
@@ -96,7 +105,7 @@ const Navbar = () => {
           <p  className={`${currentEndpoint === "/" ? "text-primary-500" : ""}
         transition duration-500 hover:text-primary-300
       `}
-      onClick={() => navigate("/home")}
+      onClick={() => navigate("/")}
     >
       Home
     </p>

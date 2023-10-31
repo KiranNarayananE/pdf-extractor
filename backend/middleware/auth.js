@@ -1,12 +1,13 @@
 import jwt from "jsonwebtoken";
 import * as dotenv from "dotenv";
 dotenv.config();
+
 export const generateToken = (userId,role) => {
   const token = jwt.sign({ id: userId,role:role },process.env.JWT_SECRET);
   return token;
 };
 
-export const verifyTokenAdmin = async (req, res, next) => {
+export const verifyTokenUser = async (req, res, next) => {
   try {
   
     let token = req.headers["authorization"];
@@ -20,7 +21,7 @@ export const verifyTokenAdmin = async (req, res, next) => {
     }
     const verified = jwt.verify(token, process.env.JWT_SECRET);
     req.user = verified;
-    if(verified.role=="admin"){
+    if(verified.role=="user"){
     next();
     }
     else{

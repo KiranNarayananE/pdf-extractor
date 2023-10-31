@@ -1,8 +1,12 @@
 import React, { useRef, useState } from 'react'
 import MaxWidthWrapper from '../../Common/MaxWidthWrapper/MaxWidthWrapper'
+import { uploadPDF } from '../../../api/api'
+import { Toast } from '../../../Utils/alert'
+import PdfEdit from '../Pdfedit/PdfEdit'
 
 const Home = () => {
     const [isLoading,setIsLoading]=useState(false)
+    const [fileId, setFileId] = useState('')
     const fileInputRef = useRef(null)
     const triggerAddFile = () => {
         if (fileInputRef.current) {
@@ -15,14 +19,24 @@ const Home = () => {
           const selectedFile = e.target.files[0];
           if (selectedFile.type === "application/pdf") {
              const formData = new FormData();
-            formData.append("PDFFile", selectedFile);
-            
+            formData.append("file", selectedFile);
+            const res = await uploadPDF(formData)
+            if(res.status){
+                setIsLoading(false)
+                setFileId(res.response.files[res.response.files.length-1]._id)
+            }
           } else {
-            
+            setIsLoading(false)
+            Toast.fire({
+                icon: "error",
+                title: "Please add a PDF file",
+              })
           }
         }
       };  
   return (
+    <>
+    {!fileId?
     <MaxWidthWrapper className='mb-12 mt-28 sm:mt-40 flex flex-col items-center justify-center text-center'>
         <div className='mx-auto mb-4 flex max-w-fit items-center justify-center space-x-2 overflow-hidden rounded-full border border-gray-200 bg-white px-7 py-2 shadow-md backdrop-blur transition-all hover:border-gray-300 hover:bg-white/50'>
           <p className='text-sm font-semibold text-gray-700'>
@@ -51,6 +65,10 @@ const Home = () => {
         </button>
         
       </MaxWidthWrapper>
+      :
+      <PdfEdit fileId={fileId}/>
+    }
+    </>
   )
 }
 
