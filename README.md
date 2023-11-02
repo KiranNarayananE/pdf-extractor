@@ -2,7 +2,7 @@
 
 This repository contains both the server-side and client-side code for a web application that allows users to upload PDF files and extract specific pages to create new PDFs. The server-side is built with Express.js, and the client-side is built with React.js. With this application, users can select the pages they want to include in the new PDF, offering a simple yet powerful PDF manipulation tool.
 
-- Client-Side Hosted Link: [Client-Side Hosted Link](https://pdf-extractor-client.onrender.com)
+- Client-Side Hosted Link: [modifypdf.netlify.app)
 
 - Server Hosted Link: [PDF Extractor Server](https://pdf-extractor-server-0z09.onrender.com)
 
